@@ -10,6 +10,6 @@ https://www.ehcache.org/schema/ehcache-core-3.0.xsd">
         <heap>100</heap>
     </cache-template>
 
-    <cache alias="default" uses-template="default"/>
+    <cache alias="book_cache" uses-template="default"/>
 
 </config>
