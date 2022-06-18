@@ -23,7 +23,7 @@ public class BookService {
 
     @Cacheable(cacheNames = "book_cache")
     public List<Book> getAllBooks(){
-        return bookRepository.findAll();
+        return bookRepository.findAllBooks();
     }
 
     @Cacheable(cacheNames = "book_cache")
@@ -31,11 +31,14 @@ public class BookService {
         return bookRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
-    public List<Author> getAllAuthors(){
-        return authorRepository.findAll();
-    }
+    public List<Author> getAllAuthors(){ return authorRepository.findAll(); }
 
-    public Book addBook(Book newBook){ return bookRepository.save(newBook); }
+    public Book addBook(Book newBook){
+        Long reader_id = newBook.getReader_id();
+        if(reader_id != null)
+            readerRepository.findById(reader_id).orElseThrow(EntityNotFoundException::new);
+        return bookRepository.save(newBook);
+    }
 
     public Book setAvailable(long book_id){
         Book book = bookRepository.findById(book_id).orElseThrow(EntityNotFoundException::new);
