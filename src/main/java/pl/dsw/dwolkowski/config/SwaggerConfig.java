@@ -26,7 +26,7 @@ public class SwaggerConfig {
 
     private ApiInfo getInfoConfiguration(){
         return new ApiInfoBuilder()
-                .title("Library API")
+                .title("Library Management")
                 .description("Basic API for library management.")
                 .license("License: dwolkowski")
                 .build();
