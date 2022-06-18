@@ -10,6 +10,16 @@ https://www.ehcache.org/schema/ehcache-core-3.0.xsd">
         <heap>100</heap>
     </cache-template>
 
+    <cache-template name="long_refresh">
+        <expiry>
+            <ttl unit="hours">2</ttl>
+        </expiry>
+        <heap>50</heap>
+    </cache-template>
+
     <cache alias="book_cache" uses-template="default"/>
+    <cache alias="reviews_cache" uses-template="default"/>
+
+    <cache alias="employee_cache" uses-template="long_refresh"/>
 
 </config>

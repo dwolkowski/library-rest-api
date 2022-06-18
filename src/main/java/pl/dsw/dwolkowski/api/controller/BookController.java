@@ -16,7 +16,7 @@ import java.util.Collection;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/library/v1/books")
+@RequestMapping("api/library/v1/book")
 @Api(tags = "Book Management")
 @Tag(name = "Book Management", description = "")
 public class BookController {
@@ -24,7 +24,7 @@ public class BookController {
     private final BookService bookService;
 
     // GET MAPPINGS
-    @GetMapping( path = "", produces = MediaType.APPLICATION_JSON_VALUE )
+    @GetMapping( path = "/all", produces = MediaType.APPLICATION_JSON_VALUE )
     @Operation( summary = "Returns all books from database." )
     public Collection<Book> getAllBooks() {
         return bookService.getAllBooks();
@@ -50,6 +50,7 @@ public class BookController {
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     @Operation( summary = "Adds book given in JSON format to database." )
+    @ApiResponse(responseCode = "404", description = "Reader Not Found")
     public Book addBook(@RequestBody Book newBook){
         return bookService.addBook(newBook);
     }
