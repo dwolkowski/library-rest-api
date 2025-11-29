@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
@@ -23,7 +24,7 @@ public class Employee {
     private String last_name;
     private String position;
     private Long boss_id;
-    private double salary;
+    private Long salary;
     private LocalDate employment_date;
     private String phone_number;
     private String address;

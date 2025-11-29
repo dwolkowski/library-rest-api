@@ -1,0 +1,89 @@
+version: '3.9'
+
+services:
+  crNode1:
+    image: cockroachdb/cockroach:v24.3.1
+    container_name: crNode1
+    hostname: crNode1
+    ports:
+      - "26257:26257"
+      - "8080:8080"
+    command: start --insecure --join=crNode1,crNode2,crNode3
+    volumes:
+      - crNode1-data:/cockroach/cockroach-data
+    networks:
+      - library-net
+
+  crNode2:
+    image: cockroachdb/cockroach:v24.3.1
+    container_name: crNode2
+    hostname: crNode2
+    ports:
+      - "26258:26257"
+      - "8081:8080"
+    command: start --insecure --join=crNode1,crNode2,crNode3
+    volumes:
+      - crNode2-data:/cockroach/cockroach-data
+    networks:
+      - library-net
+
+  crNode3:
+    image: cockroachdb/cockroach:v24.3.1
+    container_name: crNode3
+    hostname: crNode3
+    ports:
+      - "26259:26257"
+      - "8082:8080"
+    command: start --insecure --join=crNode1,crNode2,crNode3
+    volumes:
+      - crNode3-data:/cockroach/cockroach-data
+    networks:
+      - library-net
+
+  init-crCluster:
+    image: cockroachdb/cockroach:v24.3.1
+    container_name: init-crCluster
+    depends_on:
+      - crNode1
+      - crNode2
+      - crNode3
+    networks:
+      - library-net
+    command: init --insecure --host=crNode1
+
+  create-schema:
+    image: cockroachdb/cockroach:v24.3.1
+    container_name: create-schema
+    depends_on:
+      init-crCluster:
+        condition: service_completed_successfully
+    volumes:
+      - ./init.sql:/init.sql
+    networks:
+      - library-net
+    entrypoint: /bin/bash
+    command: -c "sleep 5 && cat /init.sql | ./cockroach sql --insecure --host=crNode1"
+
+  library-api:
+    build: .
+    container_name: library-api
+    ports:
+      - "8090:8090"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://crNode1:26257/library?sslmode=disable
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=
+    networks:
+      - library-net
+    depends_on:
+      create-schema:
+        condition: service_completed_successfully
+
+volumes:
+  crNode1-data:
+  crNode2-data:
+  crNode3-data:
+
+networks:
+  library-net:
+    driver: bridge

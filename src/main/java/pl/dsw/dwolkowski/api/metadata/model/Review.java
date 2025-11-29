@@ -20,7 +20,7 @@ public class Review {
     private Long review_id;
     private Long book_id;
     private Long reader_id;
-    private int rating;
+    private Long rating;
     private String review;
 
 }

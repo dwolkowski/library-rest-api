@@ -14,6 +14,7 @@ import pl.dsw.dwolkowski.api.metadata.model.Book;
 import pl.dsw.dwolkowski.api.repository.BookRepository;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -39,7 +40,7 @@ class BookControllerTest {
     private Book testBook;
 
     @BeforeEach
-     private void setup(){
+    public void setup(){
         if( testBook == null || !bookRepository.existsById(testBook.getBook_id())){
             testBook = new Book();
             testBook.setTitle("Test Book");
@@ -47,7 +48,7 @@ class BookControllerTest {
             testBook.setRelease_date(LocalDate.now());
             testBook.setLanguage("Test");
             testBook.setAvailable(true);
-            testBook.setPrice(1.11);
+            testBook.setPrice(BigDecimal.valueOf(1.11));
 
             bookRepository.save(testBook);
         }

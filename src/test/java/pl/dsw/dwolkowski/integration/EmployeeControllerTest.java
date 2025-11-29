@@ -39,13 +39,13 @@ class EmployeeControllerTest {
     private Employee testEmployee;
 
     @BeforeEach
-    private void setup(){
+    public void setup(){
         if( testEmployee == null || !employeeRepository.existsById(testEmployee.getEmployee_id())){
             testEmployee = new Employee();
             testEmployee.setName("Test");
             testEmployee.setLast_name("Test");
             testEmployee.setPosition("Test");
-            testEmployee.setSalary(9999);
+            testEmployee.setSalary(9999L);
             testEmployee.setEmployment_date(LocalDate.now());
             testEmployee.setPhone_number("Test");
             testEmployee.setAddress("Test");

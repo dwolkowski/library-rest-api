@@ -38,12 +38,12 @@ class ReviewControllerTest {
     private Review testReview;
 
     @BeforeEach
-    private void setup(){
+    public void setup(){
         if( testReview == null || !reviewRepository.existsById(testReview.getReview_id())){
             testReview = new Review();
             testReview.setBook_id(1L);
             testReview.setReader_id(1L);
-            testReview.setRating(6);
+            testReview.setRating(6L);
             testReview.setReview("Test");
 
             reviewRepository.save(testReview);
