@@ -5,14 +5,16 @@ https://www.ehcache.org/schema/ehcache-core-3.0.xsd">
 
     <cache-template name="default">
         <expiry>
-            <ttl unit="minutes">30</ttl>
+            <!-- 1s FOR LOAD BALANCER TESTS -->
+            <ttl unit="seconds">1</ttl>
         </expiry>
         <heap>100</heap>
     </cache-template>
 
     <cache-template name="long_refresh">
         <expiry>
-            <ttl unit="hours">2</ttl>
+            <!-- 1s FOR LOAD BALANCER TESTS -->
+            <ttl unit="seconds">1</ttl>
         </expiry>
         <heap>50</heap>
     </cache-template>

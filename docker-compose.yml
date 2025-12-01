@@ -40,6 +40,20 @@ services:
     networks:
       - library-net
 
+  haproxy:
+    image: haproxy:2.8-alpine
+    container_name: haproxy
+    depends_on:
+      - crNode1
+    ports:
+      - "26250:26250"
+      - "8088:8088"
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    networks:
+      - library-net
+    restart: always
+
   init-crCluster:
     image: cockroachdb/cockroach:v24.3.1
     container_name: init-crCluster
@@ -70,14 +84,16 @@ services:
     ports:
       - "8090:8090"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://crNode1:26257/library?sslmode=disable
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://haproxy:26250/library?sslmode=disable
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=admin
     networks:
       - library-net
     depends_on:
       create-schema:
         condition: service_completed_successfully
+      haproxy:
+        condition: service_started
 
 volumes:
   crNode1-data:

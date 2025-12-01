@@ -1,3 +1,5 @@
+SET CLUSTER SETTING server.time_until_store_dead = '30s';
+
 CREATE DATABASE IF NOT EXISTS library;
 
 USE library;
