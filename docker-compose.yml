@@ -8,7 +8,7 @@ services:
     ports:
       - "26257:26257"
       - "8080:8080"
-    command: start --insecure --join=crNode1,crNode2,crNode3
+    command: start --insecure --join=crNode1,crNode2,crNode3,crNode4,crNode5
     volumes:
       - crNode1-data:/cockroach/cockroach-data
     networks:
@@ -21,7 +21,7 @@ services:
     ports:
       - "26258:26257"
       - "8081:8080"
-    command: start --insecure --join=crNode1,crNode2,crNode3
+    command: start --insecure --join=crNode1,crNode2,crNode3,crNode4,crNode5
     volumes:
       - crNode2-data:/cockroach/cockroach-data
     networks:
@@ -34,9 +34,35 @@ services:
     ports:
       - "26259:26257"
       - "8082:8080"
-    command: start --insecure --join=crNode1,crNode2,crNode3
+    command: start --insecure --join=crNode1,crNode2,crNode3,crNode4,crNode5
     volumes:
       - crNode3-data:/cockroach/cockroach-data
+    networks:
+      - library-net
+
+  crNode4:
+    image: cockroachdb/cockroach:v24.3.1
+    container_name: crNode4
+    hostname: crNode4
+    ports:
+      - "26260:26257"
+      - "8083:8080"
+    command: start --insecure --join=crNode1,crNode2,crNode3,crNode4,crNode5
+    volumes:
+      - crNode4-data:/cockroach/cockroach-data
+    networks:
+      - library-net
+
+  crNode5:
+    image: cockroachdb/cockroach:v24.3.1
+    container_name: crNode5
+    hostname: crNode5
+    ports:
+      - "26261:26257"
+      - "8084:8080"
+    command: start --insecure --join=crNode1,crNode2,crNode3,crNode4,crNode5
+    volumes:
+      - crNode5-data:/cockroach/cockroach-data
     networks:
       - library-net
 
@@ -45,6 +71,10 @@ services:
     container_name: haproxy
     depends_on:
       - crNode1
+      - crNode2
+      - crNode3
+      - crNode4
+      - crNode5
     ports:
       - "26250:26250"
       - "8088:8088"
@@ -61,6 +91,8 @@ services:
       - crNode1
       - crNode2
       - crNode3
+      - crNode4
+      - crNode5
     networks:
       - library-net
     command: init --insecure --host=crNode1
@@ -99,6 +131,8 @@ volumes:
   crNode1-data:
   crNode2-data:
   crNode3-data:
+  crNode4-data:
+  crNode5-data:
 
 networks:
   library-net:
